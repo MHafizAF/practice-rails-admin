@@ -38,7 +38,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  respond_to :json
+
+  private
+
+  def respond_with(resource, options = {})
+    if resource.persisted?
+      render json: { 
+        message: "Sign up successfully",
+        token: request.env["warden-jwt_auth.token"],
+        data: resource
+      }, status: :created
+    else 
+      render json: { message: resource.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_up_params

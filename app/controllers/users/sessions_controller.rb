@@ -18,7 +18,33 @@ class Users::SessionsController < Devise::SessionsController
   #   super
   # end
 
-  # protected
+  respond_to :json 
+
+  private
+
+  def respond_with(resource, options = {})
+    render json: {
+      message: "User signed in successfully",
+      token: request.env["warden-jwt_auth.token"],
+      data: current_user
+    }, status: :ok
+  end
+
+  def respond_to_on_destroy
+    token = request.headers["Authorization"]
+    jwt_payload = JWT.decode(token.split(" ")[1], ENV["JWT_SECRET_KEY"]).first
+    current_user = User.find(jwt_payload["sub"])
+
+    if current_user 
+      render json: {
+        message: "Signed out successfully"
+      }, status: :ok
+    else
+      render json: {
+        message: "User has no active session"
+      }, status: :unauthorized
+    end
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_in_params
