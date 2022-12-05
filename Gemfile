@@ -15,6 +15,9 @@ gem "puma", "~> 5.0"
 # Use to debugging
 gem "pry"
 
+# Use rails admin for administration data 
+gem "rails_admin"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -58,3 +61,5 @@ group :development do
   # gem "spring"
 end
 
+gem "sassc-rails"
+gem "sassc-rails"
